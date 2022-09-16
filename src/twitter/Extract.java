@@ -53,7 +53,7 @@ public class Extract {
      *         include a username at most once.
      */
     
-    private static boolean charIsValid(char ch){
+    private static boolean charIsValidUsername(char ch){
     	return Character.isLetter(ch) || ch == '-' || ch == '_' || Character.isDigit(ch);
     }
     
@@ -65,9 +65,9 @@ public class Extract {
     			int startIndex = text.indexOf("@", index);
     			if(startIndex == -1)
     				break;
-    			if(startIndex == 0 || !charIsValid(text.charAt(startIndex - 1))){
+    			if(startIndex == 0 || !charIsValidUsername(text.charAt(startIndex - 1))){
     				int finishIndex = startIndex + 1;
-    				for(; finishIndex < text.length() && charIsValid(text.charAt(finishIndex)) ; finishIndex++) ;
+    				for(; finishIndex < text.length() && charIsValidUsername(text.charAt(finishIndex)) ; finishIndex++) ;
     				String substr = text.substring(startIndex+1, finishIndex).toLowerCase();
     				if(!mentionedUsers.contains(substr));
 						mentionedUsers.add(substr);

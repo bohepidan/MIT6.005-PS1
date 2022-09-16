@@ -18,6 +18,11 @@ public class FilterTest {
      * See the ic03-testing exercise for examples of what a testing strategy comment looks like.
      * Make sure you have partitions.
      */
+	/*
+	 * writtenBy: 
+	 * 	tweets: empty, noContains, contains
+	 * 	
+	 */
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
@@ -28,6 +33,25 @@ public class FilterTest {
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
+    }    
+
+    
+    private static final Tweet myTweet1 = new Tweet(1, "laolai", "is it reasonable to talk about rivest so much?", d1);
+    private static final Tweet myTweet2 = new Tweet(2, "songyu", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet myTweet3 = new Tweet(3, "laolai", "lao zi zui qiang @songyu", d2);
+
+    @Test
+    public void myTestWrittenBy(){
+        List<Tweet> writtenBy1 = Filter.writtenBy(Arrays.asList(myTweet1), "songyu");
+        List<Tweet> writtenBy2 = Filter.writtenBy(Arrays.asList(myTweet1, myTweet2), "songyu");
+        List<Tweet> writtenBy3 = Filter.writtenBy(Arrays.asList(myTweet1, myTweet2, myTweet3), "laolai");
+    	
+        assertEquals("expected singleton list", 0, writtenBy1.size());
+        assertEquals("expected singleton list", 1, writtenBy2.size());
+        assertEquals("expected singleton list", 2, writtenBy3.size());
+        assertTrue("expected list to contain tweet", writtenBy1.isEmpty());
+        assertTrue("expected list to contain tweet", writtenBy2.contains(myTweet2));
+        assertTrue("expected list to contain tweet", writtenBy3.contains(myTweet1) &&  writtenBy3.contains(myTweet3));
     }
     
     @Test
@@ -37,7 +61,28 @@ public class FilterTest {
         assertEquals("expected singleton list", 1, writtenBy.size());
         assertTrue("expected list to contain tweet", writtenBy.contains(tweet1));
     }
-    
+    /*
+     * inTimespan:
+     * 	timespan:
+     * 	tweets:	nobetween, at two sides, between
+     */
+    @Test
+    public void myTestInTimespan(){
+        Instant testStart = Instant.parse("2016-02-17T09:00:00Z");
+        Instant test1 = Instant.parse("2016-02-17T10:00:00Z");
+        Instant test2 = Instant.parse("2016-02-17T11:00:00Z");
+        Instant test3 = Instant.parse("2016-02-17T10:15:00Z");
+        Instant test4 = Instant.parse("2016-02-17T10:30:00Z");
+        Instant testEnd = Instant.parse("2016-02-17T12:00:00Z");
+
+        List<Tweet> inTimespan1 = Filter.inTimespan(Arrays.asList(tweet1, tweet2), new Timespan(test3, test4));
+        List<Tweet> inTimespan2 = Filter.inTimespan(Arrays.asList(tweet1, tweet2), new Timespan(test1, test2));
+        List<Tweet> inTimespan3 = Filter.inTimespan(Arrays.asList(tweet1, tweet2), new Timespan(testStart, testEnd));
+        
+        assertTrue("expected empty", inTimespan1.isEmpty());
+        assertTrue("expected contain", inTimespan2.contains(tweet1) && inTimespan2.contains(tweet2));
+        assertTrue("expected contain", inTimespan3.contains(tweet1) && inTimespan3.contains(tweet2));
+    }
     @Test
     public void testInTimespanMultipleTweetsMultipleResults() {
         Instant testStart = Instant.parse("2016-02-17T09:00:00Z");
