@@ -68,7 +68,9 @@ public class Extract {
     			if(startIndex == 0 || !charIsValid(text.charAt(startIndex - 1))){
     				int finishIndex = startIndex + 1;
     				for(; finishIndex < text.length() && charIsValid(text.charAt(finishIndex)) ; finishIndex++) ;
-    				mentionedUsers.add(text.substring(startIndex+1, finishIndex));
+    				String substr = text.substring(startIndex+1, finishIndex).toLowerCase();
+    				if(!mentionedUsers.contains(substr));
+						mentionedUsers.add(substr);
     			}
     			index = startIndex + 1;
     		}

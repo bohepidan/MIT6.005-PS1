@@ -29,7 +29,7 @@ public class ExtractTest {
 
     private static final Tweet myTweet1 = new Tweet(1, "laolai", "wo diao ni ma", day1);
     private static final Tweet myTweet2 = new Tweet(2, "songyu", "zen me shuo?@laolai", day2);
-    private static final Tweet myTweet3 = new Tweet(2, "songyu", "@goushiguai jiang zi shuai? @goushi wo shi ni die", day3);
+    private static final Tweet myTweet3 = new Tweet(2, "songyu", "@goushiguai jiang zi shuai? @goushi wo@jiangzi shi ni die", day3);
     
 	@Test
 	public void testGetTimeSpan(){
@@ -90,6 +90,7 @@ public class ExtractTest {
 
     	assertTrue("expected contain tweet laolai", mentionedUsers3.contains("laolai"));
     	assertTrue("expected contain tweet laolai", mentionedUsers3.contains("goushiguai"));
+    	assertFalse("expected contain tweet laolai", mentionedUsers3.contains("jiangzi"));
     	assertTrue("expected contain tweet goushi", mentionedUsers3.contains("goushi"));
     }
 
