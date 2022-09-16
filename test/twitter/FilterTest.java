@@ -94,7 +94,30 @@ public class FilterTest {
         assertTrue("expected list to contain tweets", inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
         assertEquals("expected same order", 0, inTimespan.indexOf(tweet1));
     }
-    
+    /*
+     * containing:
+     * 	input:
+     * 		words:
+     * 		tweets: noContains, contains, different case
+     * 	output:
+     * 		sameOrder as input
+     * 
+     */
+    //private static final Tweet myTweet1 = new Tweet(1, "laolai", "is it reasonable to talk about rivest so much?", d1);
+    //private static final Tweet myTweet2 = new Tweet(2, "songyu", "rivest talk in 30 minutes #hype", d2);
+    //private static final Tweet myTweet3 = new Tweet(3, "laolai", "lao zi zui qiang @songyu", d2);
+    @Test
+    public void myTestContaning(){
+        List<Tweet> containing1 = Filter.containing(Arrays.asList(myTweet1, myTweet2), Arrays.asList("qiang"));
+        List<Tweet> containing2 = Filter.containing(Arrays.asList(myTweet1, myTweet2, myTweet3), Arrays.asList("qiang"));
+        List<Tweet> containing3 = Filter.containing(Arrays.asList(myTweet1, myTweet2, myTweet3), Arrays.asList("talk"));
+
+        assertTrue("expected empty list", containing1.isEmpty());
+        assertTrue("expected list to contain tweets", containing2.containsAll(Arrays.asList(myTweet3)));
+        assertTrue("expected list to contain tweets", containing3.containsAll(Arrays.asList(myTweet1, myTweet2)));
+        assertEquals("expected same order", 0, containing3.indexOf(myTweet1));
+        assertEquals("expected same order", 1, containing3.indexOf(myTweet2));
+    }
     @Test
     public void testContaining() {
         List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("talk"));
