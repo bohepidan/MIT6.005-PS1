@@ -17,7 +17,36 @@ public class ExtractTest {
      * TODO: your testing strategies for these methods should go here.
      * See the ic03-testing exercise for examples of what a testing strategy comment looks like.
      * Make sure you have partitions.
+     * 
+     * getTimeSpan:
+     * 	Partition inputs:
+     * 	tweets.size : 1, 2, >2
+     *	timeSpan: 0, !0
      */
+    private static final Instant day1 = Instant.parse("2022-09-06T16:30:00Z");
+    private static final Instant day2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant day3 = Instant.parse("2015-02-17T11:00:00Z");
+
+    private static final Tweet myTweet1 = new Tweet(1, "laolai", "wo shuo jiang zi gou shi a!", day1);
+    private static final Tweet myTweet2 = new Tweet(2, "songyu", "zen me shuo?", day2);
+    private static final Tweet myTweet3 = new Tweet(2, "songyu", "jiang zi shuai?", day3);
+    
+	@Test
+	public void testGetTimeSpan(){
+		Timespan timespan1 = Extract.getTimespan(Arrays.asList(myTweet1));
+		Timespan timespan2 = Extract.getTimespan(Arrays.asList(myTweet1, myTweet2));
+		Timespan timespan3 = Extract.getTimespan(Arrays.asList(myTweet1, myTweet2, myTweet3));
+
+		assertEquals("expected start", day1, timespan1.getStart());
+        assertEquals("expected end", day1, timespan1.getEnd());
+        
+		assertEquals("expected start", day2, timespan2.getStart());
+        assertEquals("expected end", day1, timespan2.getEnd());  
+        
+		assertEquals("expected start", day3, timespan3.getStart());
+        assertEquals("expected end", day1, timespan3.getEnd());
+	}
+	
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");

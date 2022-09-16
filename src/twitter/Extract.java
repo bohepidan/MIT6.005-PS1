@@ -24,7 +24,16 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+    	Timespan timespan = new Timespan(tweets.get(0).getTimestamp(), tweets.get(0).getTimestamp());
+    	for(Tweet tweet : tweets){
+    		if(tweet.getTimestamp().isBefore(timespan.getStart())){
+    			timespan = new Timespan(tweet.getTimestamp(), timespan.getEnd());
+    		}
+    		if(tweet.getTimestamp().isAfter(timespan.getEnd())){
+    			timespan = new Timespan(timespan.getStart(), tweet.getTimestamp());
+    		}
+    	}
+    	return timespan;
     }
 
     /**
