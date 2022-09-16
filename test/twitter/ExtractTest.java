@@ -27,9 +27,9 @@ public class ExtractTest {
     private static final Instant day2 = Instant.parse("2016-02-17T11:00:00Z");
     private static final Instant day3 = Instant.parse("2015-02-17T11:00:00Z");
 
-    private static final Tweet myTweet1 = new Tweet(1, "laolai", "wo shuo jiang zi gou shi a!", day1);
-    private static final Tweet myTweet2 = new Tweet(2, "songyu", "zen me shuo?", day2);
-    private static final Tweet myTweet3 = new Tweet(2, "songyu", "jiang zi shuai?", day3);
+    private static final Tweet myTweet1 = new Tweet(1, "laolai", "wo diao ni ma", day1);
+    private static final Tweet myTweet2 = new Tweet(2, "songyu", "zen me shuo?@laolai", day2);
+    private static final Tweet myTweet3 = new Tweet(2, "songyu", "@goushiguai jiang zi shuai? @goushi wo shi ni die", day3);
     
 	@Test
 	public void testGetTimeSpan(){
@@ -72,6 +72,25 @@ public class ExtractTest {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet1));
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
+    }
+    /*
+     * getMentionedUsers:
+     * 	 mentioned usr: 0, 1, >1 
+     * 	
+     */
+    @Test
+    public void myTestGetMentionedUsersNoMention(){
+    	Set<String> mentionedUsers1 = Extract.getMentionedUsers(Arrays.asList(myTweet1));
+    	Set<String> mentionedUsers2 = Extract.getMentionedUsers(Arrays.asList(myTweet1,myTweet2));
+    	Set<String> mentionedUsers3 = Extract.getMentionedUsers(Arrays.asList(myTweet1,myTweet2,myTweet3));
+    	
+    	assertTrue("expected empty", mentionedUsers1.isEmpty());
+
+    	assertTrue("expected contain tweet laolai", mentionedUsers2.contains("laolai"));
+
+    	assertTrue("expected contain tweet laolai", mentionedUsers3.contains("laolai"));
+    	assertTrue("expected contain tweet laolai", mentionedUsers3.contains("goushiguai"));
+    	assertTrue("expected contain tweet goushi", mentionedUsers3.contains("goushi"));
     }
 
     /*

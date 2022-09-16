@@ -3,6 +3,7 @@
  */
 package twitter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +52,28 @@ public class Extract {
      *         Twitter usernames are case-insensitive, and the returned set may
      *         include a username at most once.
      */
+    
+    private static boolean charIsValid(char ch){
+    	return Character.isLetter(ch) || ch == '-' || ch == '_' || Character.isDigit(ch);
+    }
+    
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+    	Set<String> mentionedUsers = new HashSet<String>();
+    	for(Tweet tweet : tweets){
+    		String text = tweet.getText();
+    		for(int index = 0; index < text.length(); ){
+    			int startIndex = text.indexOf("@", index);
+    			if(startIndex == -1)
+    				break;
+    			if(startIndex == 0 || !charIsValid(text.charAt(startIndex - 1))){
+    				int finishIndex = startIndex + 1;
+    				for(; finishIndex < text.length() && charIsValid(text.charAt(finishIndex)) ; finishIndex++) ;
+    				mentionedUsers.add(text.substring(startIndex+1, finishIndex));
+    			}
+    			index = startIndex + 1;
+    		}
+    	}
+    	return mentionedUsers;
     }
 
 }
