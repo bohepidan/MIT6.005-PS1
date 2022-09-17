@@ -5,6 +5,7 @@ package twitter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +66,44 @@ public class SocialNetwork {
      * @return a list of all distinct Twitter usernames in followsGraph, in
      *         descending order of follower count.
      */
+    //the class Compare is only used for method influencers()
+    static private class Compare{
+    	String string;
+    	int frequency;
+		Compare(){
+    		string = new String();
+    		frequency = 0;
+    	}
+		Compare(String str, int freq){
+			string = str;
+			frequency = freq;
+		}
+    }
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+    	List<Compare> sortList = new ArrayList<>();
+    	for(Map.Entry<String, Set<String>> entry: followsGraph.entrySet()){
+    		for(String follows : entry.getValue()){
+    			boolean found = false;
+				for(Compare elem : sortList){
+					if(elem.string.equals(follows)){
+						elem.frequency++;
+						found = true;
+						break;
+					}
+				}
+				if(found == false){
+					sortList.add(new Compare(follows, 1));
+				}
+    		}
+    	}
+    	Collections.sort(sortList, (o1, o2) -> {
+    	    return o2.frequency -o1.frequency;
+    	});	
+    	List<String> influencers = new ArrayList<>();
+    	for(Compare elem : sortList){
+    		influencers.add(elem.string);
+    	}
+    	return influencers;
     }
 
 }

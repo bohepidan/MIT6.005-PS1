@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +75,32 @@ public class SocialNetworkTest {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<>());
         
         assertTrue("expected empty graph", followsGraph.isEmpty());
+    }
+    /*
+     * infuencers():
+     * 	input: 
+     * 		followsGraph: empty(x), 1, >1
+     * 	ouput:
+     * 		ordered.
+     */
+    @Test
+    public void myTestInfluencers(){
+        Map<String, Set<String>> followsGraph1 = new HashMap<>();
+        followsGraph1.put("laolai", new HashSet<String>(Arrays.asList("songyu")));
+        List<String> influencers1 = SocialNetwork.influencers(followsGraph1);
+        assertTrue("expected contains", influencers1.contains("songyu"));
+        
+        Map<String, Set<String>> followsGraph2 = new HashMap<>();
+        followsGraph2.put("laolai", new HashSet<String>(Arrays.asList("songyu", "jiangzi", "fagui")));
+        followsGraph2.put("songyu", new HashSet<String>(Arrays.asList("laolai", "goushi")));
+        followsGraph2.put("fagui", new HashSet<String>(Arrays.asList("laolai", "book")));
+        followsGraph2.put("newton", new HashSet<String>(Arrays.asList("laolai", "songyu")));
+        List<String> influencers2 = SocialNetwork.influencers(followsGraph2);
+
+        assertTrue("expected contains", influencers2.contains("songyu")&& influencers2.contains("laolai")&&influencers2.contains("fagui"));
+        assertEquals("expected ordered", 0, influencers2.indexOf("laolai"));
+        assertEquals("expected ordered", 1, influencers2.indexOf("songyu"));
+        
     }
     
     @Test
